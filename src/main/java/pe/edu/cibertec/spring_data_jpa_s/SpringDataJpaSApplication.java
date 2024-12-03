@@ -189,7 +189,7 @@ public class SpringDataJpaSApplication implements CommandLineRunner {
 //        System.out.println(email);
 
         /**
-         * findAll - Caching
+         * findAll - Caching - 1ra
          */
         System.out.println("-------------------------------");
         System.out.println("findAll() - 1ra llamada MySQL");
@@ -201,7 +201,7 @@ public class SpringDataJpaSApplication implements CommandLineRunner {
         });
 
         /**
-         * findAll - Caching
+         * findAll - Caching - 2da
          */
         System.out.println(" ");
         System.out.println("-------------------------------");
@@ -209,6 +209,37 @@ public class SpringDataJpaSApplication implements CommandLineRunner {
         System.out.println("-------------------------------");
         Iterable<Film> iterable2 = filmRepository.findAll();
         iterable2.forEach((film) -> {
+            String message = String.format("%s:%s;", film.getFilm_id(), film.getTitle());
+            System.out.print(message);
+        });
+
+        /**
+         * findAll - Caching - 3ra
+         */
+        System.out.println(" ");
+        System.out.println("-------------------------------");
+        System.out.println("save() - Film");
+        System.out.println("-------------------------------");
+        Optional<Film> optional = filmRepository.findById(1);
+        optional.ifPresentOrElse(
+                (film) -> {
+                    film.setTitle("BATMAN RETURN");
+                    filmRepository.save(film);
+                },
+                () -> {
+                    System.out.println("Film not found");
+                }
+        );
+
+        /**
+         * findAll - Caching - 4ta llamada
+         */
+        System.out.println(" ");
+        System.out.println("-------------------------------");
+        System.out.println("findAll() - 4ta llamada Cache");
+        System.out.println("-------------------------------");
+        Iterable<Film> iterable3 = filmRepository.findAll();
+        iterable3.forEach((film) -> {
             String message = String.format("%s:%s;", film.getFilm_id(), film.getTitle());
             System.out.print(message);
         });
